@@ -20,10 +20,23 @@ module.exports = {
         orange: colors.orange,
         pink: colors.pink,
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            color: "",
+            h1: {
+              color: "",
+            },
+            strong: {
+              color: "",
+            },
+          },
+        },
+      },
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
