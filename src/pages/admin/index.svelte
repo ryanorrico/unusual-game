@@ -3,15 +3,16 @@
   import Api from "../../utils/api";
   import { user, userDocuments } from "../../stores";
   let posts;
+  $: fetchPosts();
 
-  // let data = {};
-  if (window.routify.inBrowser) {
-    async function fetchPosts() {
+  async function fetchPosts() {
+    if (!window.routify.inBrowser) {
+      return;
+    } else {
       const data = await Api.get("/posts");
       posts = data;
       $ready();
     }
-    $: fetchPosts();
   }
 </script>
 

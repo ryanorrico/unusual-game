@@ -1,6 +1,5 @@
 <script>
-  export let user;
-  console.log("$user :>> ", $user);
+  export let currentUser;
 
   export let avatarColors = [
     "#1abc9c",
@@ -27,7 +26,7 @@
   import { onMount } from "svelte";
   export let width = 32;
   export let round = true;
-  export let src = $user.image;
+  export let src = $currentUser.image;
   let avatarImage;
 
   /*
@@ -83,7 +82,7 @@
   }
 
   onMount(() => {
-    avatarImage.src = src !== "" ? src : LetterAvatar(user.name, width);
+    avatarImage.src ? src : LetterAvatar($currentUser.name, width);
   });
 </script>
 
@@ -97,4 +96,4 @@
   bind:this={avatarImage}
   class="rounded-full"
   style="height: {width}px; width: {width}px;"
-  alt={user.name} />
+  alt={$currentUser.name} />

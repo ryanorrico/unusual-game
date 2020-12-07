@@ -37,14 +37,15 @@
     "rollup-plugin-hot": "^0.1.1",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-postcss": "https://github.com/isaacl/rollup-plugin-postcss",
-    "rollup-plugin-svelte": "^6.1.0",
+    "rollup-plugin-svelte": "^6.1.1",
     "rollup-plugin-svelte-hot": "^0.11.1",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-workbox": "^5.2.1",
     "spank": "^1.4.0",
     "spassr": "^2.1.6",
-    "svelte": "^3.29.4",
+    "svelte": "^3.30.1",
     "svelte-preprocess": "^4.5.2",
+    "svelte-range-slider-pips": "^1.5.0",
     "tossr": "^1.3.1"
   },
   "routify": {
@@ -72,13 +73,14 @@
     "@capacitor/ios": "^2.4.3",
     "@rails/activestorage": "^6.0.3-4",
     "@tailwindcss/typography": "^0.3.1",
-    "@vime/svelte": "^4.7.3",
     "autoprefixer": "^10.0.2",
     "countable": "^3.0.1",
+    "filepond": "^4.23.1",
+    "filepond-plugin-image-preview": "^4.6.4",
     "howler": "^2.2.1",
-    "pell": "^1.0.6",
     "quill": "^1.3.7",
+    "svelte-filepond": "0.0.1",
     "tailwindcss": "^2.0.1",
-    "wavesurfer.js": "^4.2.0"
+    "uuid": "^8.3.1"
   }
 }

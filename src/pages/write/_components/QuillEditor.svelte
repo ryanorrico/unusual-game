@@ -1,6 +1,7 @@
 <script>
   import { onMount, afterUpdate } from "svelte";
   import { createEventDispatcher } from "svelte";
+  import { uploadedImage } from "../../../stores";
   export let currentDocument;
 
   // export let user;
@@ -19,6 +20,7 @@
 
   onMount(() => {
     quill = new Quill(editor, quillOptions);
+
     quill.clipboard.dangerouslyPasteHTML($currentDocument.body);
     quill.on("text-change", function (delta, oldDelta, source) {
       dispatch("contentChange", {
@@ -29,12 +31,29 @@
       });
     });
   });
+
+  export function embedImage() {
+    const range = quill.getSelection();
+    quill.insertEmbed(range ? range.index : 0, "image", $uploadedImage);
+    $uploadedImage = null;
+  }
 </script>
 
+<style>
+  button#embed-image {
+    background: linear-gradient(180deg, #8614f8 0, #760be0 100%);
+    color: white;
+  }
+</style>
+
 <QuillToolbar />
-<div>
-  <div bind:this={editor} />
-</div>
+
+{#if $uploadedImage}
+  <button on:click={embedImage} id="embed-image">Embed image</button>
+  <!-- <div class="text-white">{$uploadedImage}</div> -->
+{/if}
+
+<div bind:this={editor} />
 
 <!-- const Inline = Quill.import("blots/inline");
 export class writeGoodBlot extends Inline {

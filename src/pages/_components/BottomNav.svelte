@@ -1,12 +1,12 @@
 <script>
   import RoundedIcon from "./RoundedIcon.svelte";
-  let urls = [
-    { link: "/", text: "Home" },
-    { link: "/play", text: "Play" },
+  // let urls = [
+  //   { link: "/", text: "Home" },
+  //   { link: "/play", text: "Play" },
 
-    { link: "/write", text: "Images" },
-  ];
-  import { url, isActive } from "@roxi/routify";
+  //   { link: "/write", text: "Images" },
+  // ];
+  import { url, isActive, page } from "@roxi/routify";
   import { user as currentUser } from "../../stores";
   import Avatar from "./Avatar.svelte";
 </script>
@@ -14,22 +14,26 @@
 <style>
   nav {
     width: 100%;
-
-    padding: 8pt;
     position: fixed;
+
     bottom: 0;
     left: 0;
     box-shadow: 0 0 2px 0 rgba(82, 82, 82, 0.79);
   }
   a {
     display: flex;
+
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0 12px;
+    padding: 12px 16px;
   }
-  .active {
-    fill: #4f46e5;
+  a.active {
+    border-top: 1px solid #8614f8;
+  }
+  a.active svg {
+    fill: #8614f8;
+    /* background: linear-gradient(180deg, #8614f8 0, #760be0 100%); */
   }
   a svg {
     width: 20pt;
@@ -52,19 +56,12 @@
 
 <!-- <div class="text-white">{$isActive('./')}</div> -->
 <!-- class:active={} -->
-<nav
-  class="sm:hidden  fixed bottom-0 bg-black w-full flex space-x-3 justify-between">
-  <a href={$url('/')}>
-    <svg
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      viewBox="0 0 122.9 77.1"
-      enable-background="new 0 0 122.9 77.1"
-      xml:space="preserve">
-      <defs />
+
+<nav class="sm:hidden  fixed bottom-0 bg-black w-full flex justify-between">
+  <!-- <div class="text-white">{$page.path}</div> -->
+  <!-- <a href={$url('/')} class:active={$page.path === '/index'}></a> -->
+  <a href="/">
+    <svg version="1.1" viewBox="0 0 122.9 77.1">
       <g id="Regular-M_1_" transform="matrix(1 0 0 1 1375.94 1126)">
         <path
           d="M-1360.6-1048.9h92.2c10.2,0,15.3-5.1,15.3-15.1v-46.9c0-10-5.2-15.1-15.3-15.1h-92.2c-10.3,0-15.3,5-15.3,15.1v46.9
@@ -116,17 +113,8 @@
     </svg>
   </a> -->
   <!-- {#each urls as url} -->
-  <a href={$url('/write')}>
-    <svg
-      version="1.1"
-      class:active={$isActive('/write')}
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      viewBox="0 0 101 101"
-      enable-background="new 0 0 101 101"
-      xml:space="preserve">
+  <a href={$url('/write')} class:active={$isActive('/write')}>
+    <svg version="1.1" viewBox="0 0 101 101">
       <defs />
       <g id="Medium-M_1_" transform="matrix(1 0 0 1 1687.3 1126)">
         <path
@@ -159,20 +147,11 @@
       </g>
     </svg>
   </a> -->
-  <a href={$url('/blog')}>
-    <!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In  -->
+  <a href={$url('/blog')} class:active={$isActive('/blog')}>
     <svg
       version="1.1"
-      class:active={$isActive('/posts')}
       xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      width="113px"
-      height="104.7px"
-      viewBox="0 0 113 104.7"
-      style="enable-background:new 0 0 113 104.7;"
-      xml:space="preserve">
+      viewBox="0 0 113 104.7">
       <defs />
       <g id="Regular-M_1_" transform="matrix(1 0 0 1 1380.87 1126)">
         <path
@@ -213,7 +192,7 @@
     </svg>
   </a> -->
 
-  <a href={$url('/podcast')}>
+  <a href={$url('/podcast')} class:active={$isActive('/podcast')}>
     <svg
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
@@ -233,10 +212,18 @@
     </svg>
   </a>
   {#if $currentUser}
-    <a href={$url(`/${$currentUser.slug}`)}>
-      <Avatar user={currentUser} />
+    <a
+      href={$url(`/${$currentUser.slug}`)}
+      class:active={$isActive(`/${$currentUser.slug}`)}>
+      {#if $currentUser.image}
+        <img
+          src={$currentUser.image}
+          class="w-8 h-8 rounded-full object-cover" />
+      {:else}
+        <Avatar {currentUser} src={$currentUser.image} />
+      {/if}
     </a>
-  {:else}<a href={$url(`/login`)}>LOG</a>{/if}
+  {:else}<a href="/login">LOG</a>{/if}
 
   <!-- {/each} -->
 </nav>

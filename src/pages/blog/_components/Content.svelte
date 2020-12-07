@@ -2,6 +2,7 @@
   export let post;
   import { fly, fade } from "svelte/transition";
   import { quintOut, backOut } from "svelte/easing";
+  import XCloseButtonForPanels from "../../_components/XCloseButtonForPanels.svelte";
   console.log("post :>> ", post);
   // function scaleItUp(node, { duration, delay }) {
   //   return {
@@ -71,46 +72,22 @@
     font-weight: bold;
     color: white;
   }
-
-  .close-button {
-    background: rgba(255, 255, 255, 0.466);
-  }
-  .close-button:active {
-    background: rgba(0, 0, 0, 0);
-  }
-  svg {
-    width: 100%;
-    fill: rgba(3, 3, 3, 0.5);
-  }
 </style>
 
-<a
-  in:fly={{ y: -20, delay: 900 }}
-  href="/blog"
-  class="close-button z-10 p-1.5 rounded-full w-6 h-6 flex items-center justify-center  absolute top-4 right-4">
-  <!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In  -->
-  <svg
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 79.8 79.8"
-    xml:space="preserve">
-    <defs />
-    <g id="Semibold-M_1_" transform="matrix(1 0 0 1 1990.92 1126)">
-      <path
-        d="M-1989.1-1057.2c-2.4,2.4-2.4,6.6,0,9.1c2.5,2.5,6.8,2.4,9.1,0.1l28.9-28.9l28.9,28.9c2.4,2.4,6.6,2.4,9.1,0
-    c2.5-2.5,2.5-6.7,0-9.1l-28.9-28.9l28.9-28.9c2.4-2.4,2.5-6.6,0-9.1c-2.5-2.5-6.7-2.5-9.1,0l-28.9,28.9l-28.9-28.9
-    c-2.3-2.4-6.6-2.5-9.1,0c-2.5,2.5-2.4,6.8,0,9.1l28.9,28.9L-1989.1-1057.2z" />
-    </g>
-  </svg>
-</a>
 <header
   in:fly={{ delay: 100, y: 60, duration: 600, easing: backOut }}
   class="relative"
-  style="background-image: url({post.image}">
+  style="background-image: url({post.cover_image}">
   <div
     in:fade={{ delay: 300, duration: 500 }}
     class="overlay absolute w-full h-full" />
-
+  <a
+    in:fly={{ y: -20, delay: 900 }}
+    href="/blog"
+    class="absolute top-4 right-4">
+    <!-- Generator: Adobe Illustrator 24.1.0, SVG Export Plug-In  -->
+    <XCloseButtonForPanels />
+  </a>
   <div
     in:fly={{ y: -20, delay: 800 }}
     id="badge"

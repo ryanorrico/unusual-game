@@ -1,13 +1,16 @@
 <script>
+  import { ready } from "@roxi/routify";
+
   import { goto, page, isActive } from "@roxi/routify";
   import { user } from "../../stores";
-  import Sidebar from "../_components/Sidebar/Sidebar.svelte";
+  // import Sidebar from "../_components/Sidebar/Sidebar.svelte";
   if (localStorage.getItem("user")) {
     $user = JSON.parse(localStorage.getItem("user"));
+    // $ready();
   }
   // import { user, layoutStore } from "../stores";
 
-  $: if (!$user || !$user.auth_token) $goto("/login", {}, true);
+  // $: if (!$user || !$user.auth_token) $goto("/login", {}, true);
 
   function logout() {
     $user = false;
@@ -21,7 +24,7 @@
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
 
   <!-- Static sidebar for desktop -->
-  <Sidebar />
+  <!-- <Sidebar /> -->
 
   <div class="flex-1 overflow-auto focus:outline-none" tabindex="0">
     <div

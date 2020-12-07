@@ -19,7 +19,7 @@
     class="w-full relative text-white overflow-hidden rounded-3xl flex shadow-lg">
     <div
       class="w-full"
-      style="background: linear-gradient(to bottom, {hexToRgbA(tailwindColors[startColor][600], 1).string}, {hexToRgbA(tailwindColors[startColor][400], 1).string});">
+      style="background: linear-gradient(to bottom, {hexToRgbA(tailwindColors[startColor][700], 1).string}, {hexToRgbA(tailwindColors[startColor][600], 1).string});">
       <div
         class="sm:max-w-sm sm:flex-none md:w-auto md:flex-auto flex flex-col items-start relative z-10 p-6 xl:p-8">
         <h2 class="text-xl font-semibold mb-2 text-shadow">

@@ -28,25 +28,26 @@
         })
         .then($ready());
       // .catch((errors) => console.log("errors :>> ", errors));
+      // };
+      // async function fetchPodcasts() {
+      //   const response = await fetch(
+      //     `https://www.buzzsprout.com/api/${buzzsproutAPI.podcastId}/episodes.json`,
+      //     {
+      //       headers: {
+      //         "Access-Control-Allow-Origin": "*",
+      //         Authorization: `Token token=${buzzsproutAPI.token}`,
+      //         "Content-Type": "application/json",
+      //       },
+      //     }
+      //   );
+      //   const data = await response.json();
+      //   podcasts = data.filter(
+      //     (podcast) =>
+      //       !podcast.title.includes("Premium Group Training", "Rabbit Hole 2:")
+      //   );
+      //   $ready();
+      // }
     };
-    // async function fetchPodcasts() {
-    //   const response = await fetch(
-    //     `https://www.buzzsprout.com/api/${buzzsproutAPI.podcastId}/episodes.json`,
-    //     {
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //         Authorization: `Token token=${buzzsproutAPI.token}`,
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    //   const data = await response.json();
-    //   podcasts = data.filter(
-    //     (podcast) =>
-    //       !podcast.title.includes("Premium Group Training", "Rabbit Hole 2:")
-    //   );
-    //   $ready();
-    // }
     $: fetchPodcasts();
   }
 </script>

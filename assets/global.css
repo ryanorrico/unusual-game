@@ -19,9 +19,9 @@ body {background-color:black;}
 .ql-container {
 	box-sizing: border-box;
 	font-family: "Inter var";
-  /* font-size: 1em; */
+  font-size: 1em;
   
-	/* height: 100%; */
+	height: 100%;
 	margin: 0px;
 	position: relative;
   }
@@ -48,7 +48,7 @@ body {background-color:black;}
 	height: 100%;
 	outline: none;
 	overflow-y: auto;
-	padding: 12px 15px;
+	/* padding: 12px 15px; */
 	tab-size: 4;
 	-moz-tab-size: 4;
 	text-align: left;

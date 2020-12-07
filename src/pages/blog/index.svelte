@@ -18,8 +18,8 @@
         .then((response) => response.json())
         .then((json) => {
           posts = json;
-          $ready();
-        });
+        })
+        .then($ready());
     };
     $: fetchPosts();
   }
@@ -30,11 +30,6 @@
     font-size: 16pt;
     color: white;
     font-weight: bold;
-  }
-
-  main {
-    height: 100%;
-    overflow: auto;
   }
 
   a {
@@ -59,7 +54,7 @@
 
 <!-- <div class="text-white">{window.routify.inBrowser}</div> -->
 <!-- <div in:receive={{ key: 'div' }} out:send={{ key: 'div' }}> -->
-<main
+<div
   in:fade={{ delay: 100, duration: 500 }}
   class="px-4 w-full sm:max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
   {#if posts}
@@ -81,4 +76,4 @@
 
   <!-- <div out:send={{ key: 'post' }} in:receive={{ key: 'post' }}>
   </div> -->
-</main>
+</div>

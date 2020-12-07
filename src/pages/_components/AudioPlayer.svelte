@@ -1,4 +1,4 @@
-<!--<script context="module" ✂prettier:content✂="CiAgbGV0IGN1cnJlbnQ7Cg==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script>-->
+<!--<script context="module" ✂prettier:content✂="CiAgbGV0IGN1cnJlbnQ7Cg==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script>-->
 <script>
   export let src;
   export let title;
@@ -17,11 +17,11 @@
 
 <style>
   article {
-    max-width: 800px;
-    border-radius: 50px;
+    /* max-width: 800px; */
+    width: 100%;
     padding: 8px;
-    width: 75%;
 
+    background: white;
     /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5); */
     /* class="p-2 w-3/4  fixed bottom-14 shadow-lg bg-blue-900  */
   }
@@ -40,11 +40,9 @@
   }
 </style>
 
-<article class:playing={!paused}>
-  <audio
-    bind:this={audio}
-    bind:paused
-    on:play={($podcastStore.playing = true)}
-    controls
-    {src} />
-</article>
+<audio
+  bind:this={audio}
+  bind:paused
+  on:play={($podcastStore.playing = true)}
+  controls
+  {src} />

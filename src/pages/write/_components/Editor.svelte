@@ -70,6 +70,7 @@
 <style>
   #editor {
     font-size: 18px;
+    height: 100%;
     background-color: white;
   }
 </style>

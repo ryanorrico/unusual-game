@@ -1,47 +1,46 @@
 <script>
   // import RoutifyIntro from './_example/_components/RoutifyIntro.svelte'
-  import { fly } from "svelte/transition";
+  // import { fly } from "svelte/transition";
   import { metatags } from "@roxi/routify";
+
   import CardStyled from "./_components/CardStyled.svelte";
   metatags.title = "Ritual";
   metatags.description = "The game...";
-  import { send, receive } from "../transitions/crossfade";
+  // import { send, receive } from "../transitions/crossfade";
 
-  import Logo from "./_components/Logo.svelte";
+  // import Logo from "./_components/Logo.svelte";
 
-  import { layoutStore } from "../stores";
+  // import { layoutStore } from "../stores";
 
-  import TopNav from "./_components/TopNav.svelte";
-  import { dataset_dev } from "svelte/internal";
+  // import {TopNav} from './_components/TopNav/'
+
   // import Particles from "./Particles.svelte";
 
-  function toggleLogo() {
-    $layoutStore.logoUpTop = !$layoutStore.logoUpTop;
-  }
-  function toggleTopNav() {
-    $layoutStore.topNav.open = !$layoutStore.topNav.open;
-  }
+  // function toggleLogo() {
+  //   $layoutStore.logoUpTop = !$layoutStore.logoUpTop;
+  // }
+  // function toggleTopNav() {
+  //   $layoutStore.topNav.open = !$layoutStore.topNav.open;
+  // }
 
-  const posts = [
+  const links = [
     {
-      id: 1,
-      name: "Rabbit Hole",
-      description:
-        "They want simple ideas. They want certainty. They want a Thing.",
-      image: "images/rabbit-hole.jpg",
+      href: "/login",
+      text: "Login",
     },
-    // {
-    //   name: "LA, baby",
-    //   description:
-    //     "I much prefer to work with reality as it is and be as effective as I can be.",
-    //   image: "images/los-angeles.jpg",
-    // },
+    {
+      href: "/discussions/test",
+      text: "Discuss",
+    },
   ];
   // import PostCard from "./_posts/_components/PostCard.svelte";
   // import Post from "./_posts/_components/Post.svelte";
   let thumbnailOpen = true;
   function toggleThumbnail() {
     thumbnailOpen = !thumbnailOpen;
+  }
+  function nextMake() {
+    this.textContent = "GIVE";
   }
 </script>
 
@@ -51,10 +50,21 @@
   }
   main {
     padding: 0 12px;
+    height: 100vh;
+    /* background: linear-gradient(180deg, #8614f8 0, #760be0 100%); */
+    /* background: linear-gradient(180deg, #8614f8 0, #760be0 100%); */
     /* height: 100vh;
     background: url(images/hell.jpg);
     background-repeat: no-repeat;
     background-size: cover; */
+  }
+  span {
+    /* background: linear-gradient(180deg, #8614f8 0, #760be0 100%); */
+    /* -webkit-background-clip: text; */
+    /* -webkit-text-fill-color: transparent; */
+    font-family: "Burbank Bold";
+    font-size: 60pt;
+    line-height: 0.9;
   }
   a {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -97,22 +107,33 @@
   }
   .left {
   } */
+  a {
+    background: linear-gradient(180deg, #8614f8 0, #760be0 100%);
+    color: white;
+  }
 </style>
 
 <!-- <TwinklingStars /> -->
 <!-- class="max-w-full bg-gray-900 h-full sm:max-w-5xl sm:mx-auto flex flex-col  py-8 transition duration-200"> -->
-<main>
-  <div id="container" in:receive={{ key: 'div' }} out:send={{ key: 'div' }}>
-    <!-- <PostCard /> -->
-
-    <!-- <img src="/images/rabbit-hole.jpg" /> -->
-  </div>
-
-  <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <CardStyled />
-    <CardStyled />
-    <CardStyled />
+<main class="flex items-center justify-center h-screen w-full">
+  <!-- <div id="container" in:receive={{ key: 'div' }} out:send={{ key: 'div' }}> -->
+  <!-- <PostCard /> -->
+  <!-- <div class="flex flex-col">
+    <span on:click={nextMake}>MAKE</span>
+    <span>MORE</span>
+    <span>MONEY</span>
   </div> -->
+
+  <!-- <img src="/images/rabbit-hole.jpg" /> -->
+  <!-- </div> -->
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    {#each links as link}
+      <a class="px-4 py-1 rounded" href={link.href}>{link.text}</a>
+      <!-- <a class="px-4 py-1 rounded" href="/login">Login</a> -->
+    {/each}
+    <CardStyled />
+  </div>
   <!-- {#if !$layoutStore.topNav.logo}
     <div in:receive={{ key: 'logo' }} out:send={{ key: 'logo' }}>
       <Logo />

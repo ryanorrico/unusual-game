@@ -1,7 +1,7 @@
 <script>
   import { params, ready } from "@roxi/routify";
-  import AudioControls from "../../_components/AudioControls.svelte";
-  import AudioPlayer from "../../_components/AudioPlayer.svelte";
+  import AudioControls from "../../_components/AudioPlayer/AudioControls.svelte";
+  // import AudioPlayer from "../../_components/AudioPlayer.svelte";
   import LoadingSpinner from "../../_components/LoadingSpinner.svelte";
   import buzzsproutAPI from "../buzzsprout";
   import { podcastStore } from "../../../stores";

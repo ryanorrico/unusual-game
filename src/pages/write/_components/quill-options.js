@@ -3,14 +3,15 @@
 // const unsubscribe = user.subscribe((value) => {
 //   userStore = value;
 // });
-import QuillToolbar from "./QuillToolbar.svelte";
-const quillToolbarOptions = [
-  [{ header: 1 }, { header: 2 }, "blockquote", "link", "image"],
-  ["bold", "italic", "underline", "strike"],
-  [{ list: "unordered" }, { list: "ordered" }],
-  [{ align: [] }],
-  // ["clean"],
-];
+// import QuillToolbar from "./QuillToolbar.svelte";
+
+// const quillToolbarOptions = [
+//   [{ header: 1 }, { header: 2 }, "blockquote", "link", "image"],
+//   ["bold", "italic", "underline", "strike"],
+//   [{ list: "unordered" }, { list: "ordered" }],
+//   [{ align: [] }],
+//   // ["clean"],
+// ];
 
 const quillOptions = {
   modules: {

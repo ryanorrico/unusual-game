@@ -1,51 +1,67 @@
 <script>
-  import { user as currentUser } from "../../stores";
+  import { user } from "../../stores";
   import { goto, url } from "@roxi/routify";
   import Api from "../../utils/api.js";
-  import { ready } from "@roxi/routify";
-
+  // import { ready } from "@roxi/routify";
+  import { fly } from "svelte/transition";
+  import { backOut } from "svelte/easing";
   let formData = {};
+
   async function login() {
     let data = await Api.post(`/authenticate`, formData);
     if (data.auth_token) {
-      $currentUser = data;
+      $user = data;
       localStorage.setItem("user", JSON.stringify(data));
-      if ($url() === "/login") {
-        // $goto("/");
-        window.history.replaceState({}, "", `/`);
-      }
+      console.log("$user :>> ", $user);
+      // if ($url() === "/login") {
+      // $goto("/");
+      window.history.replaceState({}, "", `/`);
+      // }
     } else {
       console.log("didnt work");
     }
-    // $goto(window.location.href);
-    $ready();
+    // $ready();
+    // $goto(window.locati  on.href);
   }
 </script>
 
-<div class="min-h-screen bg-white flex">
+<style>
+  main {
+    color: white;
+  }
+  label {
+    color: gray;
+  }
+  input {
+    color: black;
+  }
+
+  button {
+    background: linear-gradient(180deg, #8614f8 0, #760be0 100%);
+  }
+</style>
+
+<main class="min-h-screen flex">
   <div
-    class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+    class="flex-1 flex flex-col justify-center pb-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
     <div class="mx-auto w-full max-w-sm lg:w-96">
-      <div>
+      <div in:fly={{ delay: 700, y: -30, easing: backOut }}>
         <!-- <img
           class="h-12 w-auto"
           src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
           alt="Workflow" /> -->
-        <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
-          Sign in to your account
-          {$url() === '/login'}
-        </h2>
-        <p class="mt-2 text-sm text-gray-600 max-w">
+        <h2 class="mt-6 text-3xl font-extrabold">You know what to do.</h2>
+        <!-- <p class="mt-2 text-sm  max-w">
           Or
-          <!-- <a href="" class="font-medium text-indigo-600 hover:text-indigo-500">
+          <a href="" class="font-medium text-indigo-600 hover:text-indigo-500">
             start your 14-day free trial
-          </a> -->
-        </p>
+          </a>
+        </p> -->
       </div>
 
       <div class="mt-8">
-        <div class="mt-6">
-          <label for="email" class="block text-sm font-medium text-gray-700">
+        <div in:fly={{ delay: 200, y: -30 }} class="mt-6 mt-4">
+          <label for="email" class="block text-sm font-medium ">
             Email address
           </label>
           <div class="mt-1">
@@ -58,8 +74,8 @@
           </div>
         </div>
 
-        <div class="space-y-1">
-          <label for="password" class="block text-sm font-medium text-gray-700">
+        <div in:fly={{ delay: 300, y: 30 }} class="space-y-1 mt-4">
+          <label for="password" class="block text-sm font-medium ">
             Password
           </label>
           <div class="mt-1">
@@ -72,13 +88,15 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div
+          in:fly={{ delay: 350, y: 30 }}
+          class="mt-2 flex items-center justify-between">
           <div class="flex items-center">
             <input
               id="remember_me"
               type="checkbox"
               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-            <label for="remember_me" class="ml-2 block text-sm text-gray-900">
+            <label for="remember_me" class="ml-2 block text-sm ">
               Remember me
             </label>
           </div>
@@ -93,8 +111,9 @@
         </div>
 
         <button
+          in:fly={{ delay: 700, y: 30, easing: backOut }}
           on:click={login}
-          class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          class="mt-4 w-full flex justify-center p-4 border border-transparent rounded-md shadow-sm  font-medium text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Sign in
         </button>
 
@@ -124,8 +143,8 @@
   <div class="hidden lg:block relative w-0 flex-1">
     <img
       class="absolute inset-0 h-full w-full object-cover"
-      src="https://images.unsplash.com/photo-1505904267569-f02eaeb45a4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
+      src="/images/rabbit-hole.jpg"
       alt="" />
   </div>
-</div>
+</main>
 <!-- on:click={submitForm} -->

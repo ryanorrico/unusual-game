@@ -1,18 +1,77 @@
 <script>
-  import { url, page, isActive } from "@roxi/routify";
+  // import { url, page, isActive } from "@roxi/routify";
+  import { fade, fly, scale, slide } from "svelte/transition";
+  import { backIn, backOut, cubicOut } from "svelte/easing";
+  let sidebarContainer;
+  export let user, currentDocument;
+  let rightPanelOpen = false;
+  let rightPanelOpenWide = false;
+  let rightPanelWidth;
+  let sidebarContainerWidth;
+  import { url } from "@roxi/routify";
+  import ImageIcon from "../svg/ImageIcon.svelte";
+  import { writable } from "svelte/store";
+  import AttachImage from "./AttachImage.svelte";
+  import SharePost from "./SharePost.svelte";
+  import ShareArrowRight from "../svg/ShareArrowRight.svelte";
+  // import VideoPlayer from "./VideoPlayer.svelte";
+  import RectanglePlay from "../svg/RectanglePlay.svelte";
+
+  function toggleRightPanel() {
+    if (rightPanelOpen && this.dataset.index !== $activeSidebarTab) {
+      $activeSidebarTab = this.dataset.index;
+    } else {
+      $activeSidebarTab = this.dataset.index;
+      console.log("$activeSidebarTab :>> ", $activeSidebarTab);
+      rightPanelOpen = !rightPanelOpen;
+      sidebarContainer.style.width = !rightPanelOpen ? "70px" : "300px";
+    }
+
+    if (!rightPanelOpen) {
+      $activeSidebarTab = null;
+    }
+  }
+  export const activeSidebarTab = writable();
+  let sidebarNavTabs = [
+    {
+      iconComponent: ImageIcon,
+      tabComponent: AttachImage,
+    },
+    {
+      iconComponent: ShareArrowRight,
+      tabComponent: SharePost,
+    },
+    // {
+    //   iconComponent: RectanglePlay,
+    //   tabComponent: VideoPlayer,
+    //   width: 500,
+    // },
+  ];
 </script>
 
 <style>
-  a {
-    max-width: 50px;
+  /* a {
+    max-width: 500px;
+  } */
+  button {
+    color: rgba(255, 255, 255, 0.5);
+    padding: 8px;
   }
-  .active {
-    fill: white;
+
+  button:active,
+  button:focus {
+    outline: none;
   }
+
+  button.active {
+    color: rgba(255, 255, 255, 0.9);
+    transition: color 300ms;
+  }
+
   svg {
     width: 100%;
-    fill: gray;
   }
+
   #logo svg {
     /* fill: rgba(255, 255, 255, 0.2); */
   }
@@ -23,14 +82,60 @@
   #home svg {
     fill: rgba(255, 255, 255, 0.2);
   }
+
+  #container {
+    /* max-width: 70px; */
+    width: 70px;
+    background: rgb(22, 22, 24);
+    transition: width 300ms;
+    height: 100%;
+  }
+
+  .rightPanelOpen {
+    width: 500px;
+  }
+  .rightPanelOpenWide {
+    width: 500px;
+  }
+  #right-panel,
+  #left-panel {
+  }
+
+  #left-panel {
+    width: 70px;
+    box-shadow: 2px 0px 1px 0 rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    padding: 0 10px;
+  }
+  #right-panel {
+    /* background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E"); */
+    padding: 80px 12px;
+    background-color: rgba(27, 27, 30, 1);
+    /* border-right: 1px solid rgba(50, 50, 50, 0.5); */
+    box-shadow: 1px 0px 1px 0 rgba(0, 0, 0, 0.3);
+    height: 100%;
+    width: 100%;
+    left: 0;
+    flex: 1;
+    top: 0;
+    z-index: 0;
+  }
 </style>
 
 <!-- Static sidebar for desktop -->
-<div class="hidden lg:flex lg:flex-shrink-0">
-  <div class="flex flex-col ">
+<div
+  id="container"
+  bind:this={sidebarContainer}
+  bind:clientWidth={sidebarContainerWidth}
+  class="hidden md:flex lg:flex-shrink-0 h-screen"
+  class:rightPanelOpen>
+  <div
+    id="left-panel"
+    transition:fly|local={{ delay: 200, x: -40 }}
+    class=" flex-shrink-0 z-10 flex flex-col ">
     <!-- Sidebar component, swap this element with another sidebar if you like -->
-    <div class="flex flex-col flex-grow bg-gray-900 pt-5 pb-4 overflow-y-auto">
-      <div
+    <div class="flex flex-col justify-between h-full pt-5 pb-4 overflow-y-auto">
+      <!-- <div
         class="text-gray-700 flex flex-col items-center flex-shrink-0 px-4 space-y-2">
         <a id="home" href="/">
           <svg
@@ -66,89 +171,42 @@
             </g>
           </svg>
         </a>
-      </div>
+      </div> -->
 
       <nav
-        class="mt-5 flex-1 flex flex-col items-center overflow-y-auto"
+        transition:fly={{ x: -20 }}
+        class="mt-5 flex flex-1 flex-col items-center overflow-y-auto"
         aria-label="Sidebar">
         <div class="mt-6 pt-6">
-          <div class="px-2 space-y-1">
-            <a href="/admin/posts" class="group flex items-center px-2 py-2 ">
-              <svg
-                version="1.1"
-                class:active={$isActive('/admin/posts')}
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 103 113.9"
-                xml:space="preserve">
-                <defs />
-                <g id="Regular-M_1_" transform="matrix(1 0 0 1 1396.3 1126)">
-                  <path
-                    d="M-1375.5-1068.2c1.3-0.1,2.6-0.2,3.9-0.2c1.3,0,2.6,0.1,4,0.2v-42.3c0-4.8,2.6-7.6,7.7-7.6h21.7v28.4
-                        c0,6.2,3.1,9.2,9.2,9.2h27.8v43.8c0,4.9-2.6,7.6-7.7,7.6h-32.3c-0.6,2.8-1.7,5.5-3.1,7.9h35.8c10.1,0,15.1-5.1,15.1-15.3v-44.3
-                        c0-6.3-0.7-9-4.6-13l-26.9-27.4c-3.7-3.8-6.8-4.6-12.3-4.6h-23.2c-10.1,0-15.1,5.2-15.1,15.3V-1068.2z M-1330.8-1090.7v-25.9
-                        l28.1,28.7h-25.4C-1330.1-1088-1330.8-1088.7-1330.8-1090.7z M-1371.5-1012.1c13.4,0,24.8-11.3,24.8-24.8
-                        c0-13.6-11.2-24.8-24.8-24.8s-24.8,11.2-24.8,24.8S-1385.1-1012.1-1371.5-1012.1z M-1387-1036.9c0-1.8,1.2-3,3-3h9.6v-9.5
-                        c0-1.8,1.2-3,3-3s3,1.2,3,3v9.5h9.5c1.8,0,3,1.2,3,3s-1.2,3-3,3h-9.5v9.6c0,1.8-1.2,3-3,3s-3-1.2-3-3v-9.6h-9.6
-                        C-1385.8-1033.9-1387-1035.1-1387-1036.9z" />
-                </g>
-              </svg>
-
-              <!-- <svg
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 122.9 77.1"
-                    enable-background="new 0 0 122.9 77.1"
-                    xml:space="preserve">
-                    <defs />
-                    <g id="Regular-M_1_" transform="matrix(1 0 0 1 1375.94 1126)">
-                      <path
-                        d="M-1360.6-1048.9h92.2c10.2,0,15.3-5.1,15.3-15.1v-46.9c0-10-5.2-15.1-15.3-15.1h-92.2c-10.3,0-15.3,5-15.3,15.1v46.9
-                        C-1375.9-1053.9-1370.9-1048.9-1360.6-1048.9z M-1360.5-1056.7c-4.9,0-7.6-2.6-7.6-7.7v-46c0-5.1,2.7-7.7,7.6-7.7h92
-                        c4.8,0,7.6,2.6,7.6,7.7v46c0,5.1-2.8,7.7-7.6,7.7H-1360.5z M-1356.1-1098.8h4.5c1.4,0,2.2-0.8,2.2-2.1v-4.5c0-1.4-0.8-2.2-2.2-2.2
-                        h-4.5c-1.3,0-2.1,0.8-2.1,2.2v4.5C-1358.3-1099.6-1357.4-1098.8-1356.1-1098.8z M-1340.4-1098.8h4.5c1.3,0,2.1-0.8,2.1-2.1v-4.5
-                        c0-1.4-0.8-2.2-2.1-2.2h-4.5c-1.4,0-2.2,0.8-2.2,2.2v4.5C-1342.6-1099.6-1341.8-1098.8-1340.4-1098.8z M-1324.7-1098.8h4.4
-                        c1.4,0,2.2-0.8,2.2-2.1v-4.5c0-1.4-0.8-2.2-2.2-2.2h-4.4c-1.4,0-2.2,0.8-2.2,2.2v4.5C-1326.9-1099.6-1326-1098.8-1324.7-1098.8z
-                        M-1309-1098.8h4.5c1.4,0,2.2-0.8,2.2-2.1v-4.5c0-1.4-0.8-2.2-2.2-2.2h-4.5c-1.3,0-2.1,0.8-2.1,2.2v4.5
-                        C-1311.1-1099.6-1310.3-1098.8-1309-1098.8z M-1293.3-1098.8h4.5c1.3,0,2.1-0.8,2.1-2.1v-4.5c0-1.4-0.8-2.2-2.1-2.2h-4.5
-                        c-1.4,0-2.2,0.8-2.2,2.2v4.5C-1295.5-1099.6-1294.6-1098.8-1293.3-1098.8z M-1277.6-1098.8h4.4c1.4,0,2.2-0.8,2.2-2.1v-4.5
-                        c0-1.4-0.8-2.2-2.2-2.2h-4.4c-1.4,0-2.2,0.8-2.2,2.2v4.5C-1279.7-1099.6-1278.9-1098.8-1277.6-1098.8z M-1356.1-1083.1h4.5
-                        c1.4,0,2.2-0.8,2.2-2.2v-4.4c0-1.4-0.8-2.2-2.2-2.2h-4.5c-1.3,0-2.1,0.8-2.1,2.2v4.4C-1358.3-1083.9-1357.4-1083.1-1356.1-1083.1z
-                        M-1340.4-1083.1h4.5c1.3,0,2.1-0.8,2.1-2.2v-4.4c0-1.4-0.8-2.2-2.1-2.2h-4.5c-1.4,0-2.2,0.8-2.2,2.2v4.4
-                        C-1342.6-1083.9-1341.8-1083.1-1340.4-1083.1z M-1324.7-1083.1h4.4c1.4,0,2.2-0.8,2.2-2.2v-4.4c0-1.4-0.8-2.2-2.2-2.2h-4.4
-                        c-1.4,0-2.2,0.8-2.2,2.2v4.4C-1326.9-1083.9-1326-1083.1-1324.7-1083.1z M-1309-1083.1h4.5c1.4,0,2.2-0.8,2.2-2.2v-4.4
-                        c0-1.4-0.8-2.2-2.2-2.2h-4.5c-1.3,0-2.1,0.8-2.1,2.2v4.4C-1311.1-1083.9-1310.3-1083.1-1309-1083.1z M-1293.3-1083.1h4.5
-                        c1.3,0,2.1-0.8,2.1-2.2v-4.4c0-1.4-0.8-2.2-2.1-2.2h-4.5c-1.4,0-2.2,0.8-2.2,2.2v4.4C-1295.5-1083.9-1294.6-1083.1-1293.3-1083.1z
-                        M-1277.6-1083.1h4.4c1.4,0,2.2-0.8,2.2-2.2v-4.4c0-1.4-0.8-2.2-2.2-2.2h-4.4c-1.4,0-2.2,0.8-2.2,2.2v4.4
-                        C-1279.7-1083.9-1278.9-1083.1-1277.6-1083.1z M-1356.1-1067.4h4.5c1.4,0,2.2-0.8,2.2-2.2v-4.5c0-1.3-0.8-2.1-2.2-2.1h-4.5
-                        c-1.3,0-2.1,0.8-2.1,2.1v4.5C-1358.3-1068.2-1357.4-1067.4-1356.1-1067.4z M-1339.9-1067.4h50.6c1.7,0,2.6-1,2.6-2.7v-3.5
-                        c0-1.7-1-2.6-2.6-2.6h-50.6c-1.7,0-2.7,1-2.7,2.6v3.5C-1342.6-1068.3-1341.6-1067.4-1339.9-1067.4z M-1277.6-1067.4h4.4
-                        c1.4,0,2.2-0.8,2.2-2.2v-4.5c0-1.3-0.8-2.1-2.2-2.1h-4.4c-1.4,0-2.2,0.8-2.2,2.1v4.5C-1279.7-1068.2-1278.9-1067.4-1277.6-1067.4z" />
-                    </g>
-                  </svg> -->
-              <!-- <svg
-                    version="1.1"
-                    class:active={$isActive('/write')}
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    viewBox="0 0 101 101"
-                    enable-background="new 0 0 101 101"
-                    xml:space="preserve">
-                    <defs />
-                    <g id="Medium-M_1_" transform="matrix(1 0 0 1 1687.3 1126)">
-                      <path
-                        d="M-1636.8-1025c27.7,0,50.5-22.9,50.5-50.5s-22.9-50.5-50.6-50.5c-27.6,0-50.4,22.9-50.4,50.5S-1664.4-1025-1636.8-1025z
-                      M-1636.8-1035.1c-22.4,0-40.3-18-40.3-40.4s17.9-40.4,40.3-40.4c22.4,0,40.4,18,40.5,40.4S-1614.4-1035.1-1636.8-1035.1z
-                      M-1654.8-1070.9h13.4v13.4c0,2.7,1.9,4.6,4.5,4.6c2.7,0,4.7-1.9,4.7-4.6v-13.4h13.4c2.7,0,4.6-1.9,4.6-4.6s-1.9-4.6-4.6-4.6h-13.4
-                      v-13.4c0-2.7-2-4.6-4.7-4.6c-2.6,0-4.5,1.9-4.5,4.6v13.4h-13.4c-2.8,0-4.7,2-4.7,4.6S-1657.6-1070.9-1654.8-1070.9z" />
-                    </g>
-                  </svg> -->
-            </a>
+          <div class="space-y-4">
+            {#if $currentDocument}
+              {#each sidebarNavTabs as tab, index}
+                <button
+                  class:active={$activeSidebarTab == index && rightPanelOpen}
+                  data-index={index}
+                  on:click={toggleRightPanel}>
+                  <svelte:component this={tab.iconComponent} />
+                </button>
+              {/each}
+            {/if}
           </div>
         </div>
       </nav>
+      <a href={$url(`/${$user.slug}`)}>
+        <img src={$user.image} class="rounded-full w-16 shadow" />
+      </a>
     </div>
   </div>
+  {#if rightPanelOpen}
+    <div
+      id="right-panel"
+      bind:clientWidth={rightPanelWidth}
+      class:rightPanelOpen>
+      {#if $activeSidebarTab}
+        <svelte:component
+          this={sidebarNavTabs[$activeSidebarTab].tabComponent} />
+      {/if}
+    </div>
+    <div class="w-1 h-full bg-gray-800" />
+  {/if}
 </div>

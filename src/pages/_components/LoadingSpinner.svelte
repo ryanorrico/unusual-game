@@ -1,6 +1,7 @@
 <script>
   export let size = 60;
-  export let color = "#4f46e5";
+  export let color = "#8614f8";
+  /* background: linear-gradient(180deg, #8614f8 0, #760be0 100%); */
   export let unit = "px";
   import { fade, scale } from "svelte/transition";
   const range = (size, startAt = 0) =>

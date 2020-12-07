@@ -1,14 +1,24 @@
+<script>
+  import { layoutStore, currentDocument } from "../../../stores";
+  import PhotoUploadOptions from "../../_components/SlideUpPanel/PhotoUploadOptions.svelte";
+
+  function imageHandler(e) {
+    $layoutStore.slideUpPanel = {
+      component: PhotoUploadOptions,
+      name: "document[images]",
+      text: "Embed an image",
+    };
+    $layoutStore.slideUpPanel.open = true;
+  }
+</script>
+
 <style>
   #quill-toolbar {
     border-color: #3f3f46;
     background-color: #27272a;
-    /* background-color:  */
   }
   button {
     border-color: #3f3f46;
-    /* padding: 6px 12px; */
-
-    /* background-color: #27272a; */
   }
   svg {
     /* width: 0.9em; */
@@ -119,11 +129,12 @@
     </button>
 
     <button
-      id="header-1-button"
+      on:click={imageHandler}
+      id="image-button"
       type="button"
       value="1"
       data-color="yellow"
-      class="ql-header  quill-toolbar-button -ml-px relative flex items-center justify-center p-2  leading-5 font-medium text-gray-300 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
+      class=" quill-toolbar-button -ml-px relative flex items-center justify-center p-2  leading-5 font-medium text-gray-300 hover:text-gray-500 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150">
       <svg
         aria-hidden="true"
         focusable="false"

@@ -57,7 +57,7 @@
       <div class="overlay absolute w-full h-full" />
       <div class="absolute top-4 left-4">
         <p class="text-2xl font-bold text-white">{post.title}</p>
-        <p class="text-lg  text-gray-300">Let's do it</p>
+        <!-- <p class="text-lg  text-gray-300">Let's do it</p> -->
       </div>
       <div class="absolute bottom-4 left-4">
         <p class="text-sm text-gray-300" />

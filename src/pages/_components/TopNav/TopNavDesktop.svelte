@@ -1,16 +1,16 @@
 <script>
-  import StatusBarPlaceholder from "../_components/StatusBarPlaceholder.svelte";
-  import Logo from "./Logo.svelte";
+  import StatusBarPlaceholder from "../StatusBarPlaceholder.svelte";
+  import Logo from "../Logo.svelte";
   import { crossfade, fly, blur } from "svelte/transition";
   // import { ClassBuilder } from "../../utils/classes";
   let c =
-    "top-0 w-full items-center justify-between flex-wrap flex left-0 z-30 p-0 h-16 z-50 fixed bg-black ";
+    "top-0 w-full items-center justify-between flex-wrap flex left-0 z-30 p-0 fixed ";
   // export let classes = classesDefault;
   // const cb = new ClassBuilder(classes, classesDefault);
   // $: c = cb.flush().add($$props.class).get();
 
   import { quintOut, backOut, backIn } from "svelte/easing";
-  import { layoutStore } from "../../stores";
+  import { layoutStore } from "../../../stores";
   // const [send, receive] = crossfade({
   //   duration: (d) => Math.sqrt(d * 200),
 
@@ -31,6 +31,9 @@
 </script>
 
 <style>
+  nav {
+    background: rgba(9, 9, 9, 0.96);
+  }
   /* :global(#top-nav) {
     height: 44pt;
     padding: 0 8pt;
