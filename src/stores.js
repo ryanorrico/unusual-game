@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
-import SlideOverPanelDefault from "./pages/_components/SlideoverPanel/SlideOverPanelDefault.svelte";
-import SlideUpPanelDefault from "./pages/_components/SlideUpPanel/SlideUpPanelDefault.svelte";
-import RightColumnDefault from "./pages/_components/RightColumn/RightColumnDefault.svelte";
+// import SlideOverPanelDefault from "./pages/_components/SlideOverPanel/SlideOverPanelDefault.svelte";
+// import SlideUpPanelDefault from "./pages/_components/SlideUpPanel/SlideUpPanelDefault.svelte";
+// import RightColumnDefault from "./pages/_components/RightColumn/RightColumnDefault.svelte";
 export const user = writable(false);
 export const userDocuments = writable();
 export const tasksStore = writable();
@@ -14,15 +14,15 @@ export const layoutStore = writable({
   topNav: { open: true, logo: false },
   rightColumn: {
     open: false,
-    component: RightColumnDefault,
+    // component: RightColumnDefault,
   },
   slideoverPanel: {
     open: false,
-    component: SlideOverPanelDefault,
+    // component: SlideOverPanelDefault,
   },
   slideUpPanel: {
     open: false,
-    component: SlideUpPanelDefault,
+    // component: SlideUpPanelDefault,
     name: "user[image]",
     text: "Upload a photo",
   },
