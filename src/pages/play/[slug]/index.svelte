@@ -1,11 +1,14 @@
 <script>
-  import { gameStore, currentGame, currentGameScore } from "../game-store";
-  import { layoutStore } from "../../../stores";
-  import { fly, fade } from "svelte/transition";
-  import { backOut } from "svelte/easing";
+  import {
+    gameStore,
+    currentGame,
+    currentGameScore,
+    currentUserIsPlaying,
+  } from "../game-store";
   import Api from "../../../utils/api";
+  import { user } from "../../../stores";
   import { params, ready } from "@roxi/routify";
-  let game;
+
   $: fetchGame();
 
   async function fetchGame() {
@@ -13,66 +16,35 @@
       return;
     } else {
       const data = await Api.get(`/games/${$params.slug}`);
-      let obj = $gameStore.find((x) => x.slug === data.slug);
-      $currentGame = obj;
-      console.log("data :>> ", data);
-      $currentGame.players = data.players;
-      $currentGame.cover_image = data.cover_image;
+      $currentGame = data;
+      console.log("$currentGame :>> ", $currentGame);
+      setCurrentGameScore(data);
+      $currentUserIsPlaying = $currentGame.players.some(
+        (p) => p.id === $user.id
+      );
 
       $ready();
     }
   }
 
-  import { onMount } from "svelte";
-  import { slide } from "svelte/transition";
-  import { crossfade } from "svelte/transition";
-  import { flip } from "svelte/animate";
-  import { quintOut, backIn, cubicInOut } from "svelte/easing";
-  import Confetti from "../../_components/Confetti.svelte";
-  import CameraCircleIcon from "../../_components/svg/CameraCircleIcon.svelte";
-  import PhotoUploadOptions from "../../_components/SlideUpPanel/PhotoUploadOptions.svelte";
+  // let membershipActive;
 
-  const [send, receive] = crossfade({
-    duration: (d) => Math.sqrt(d * 200),
+  // if ($user.memberships.games.find((g) => g.id == $currentGame.id)) {
+  //   membershipActive = true;
+  // } else {
+  //   membershipActive = false;
+  // }
 
-    fallback(node, params) {
-      const style = getComputedStyle(node);
-      const transform = style.transform === "none" ? "" : style.transform;
+  function setCurrentGameScore(data) {
+    let completedTasks = data.tasks.filter((t) => t.complete);
+    $currentGameScore = completedTasks.reduce((t, { points }) => t + points, 0);
+  }
 
-      return {
-        duration: 600,
-        easing: quintOut,
-        css: (t) => `
-              transform: ${transform} scale(${t});
-              opacity: ${t}
-            `,
-      };
-    },
-  });
+  // import PhotoUploadOptions from "../../_components/SlideUpPanel/PhotoUploadOptions.svelte";
+  import GameCover from "../../_components/Games/GameCover.svelte";
+  import GameTasks from "../../_components/Games/GameTasks.svelte";
+
   let confettiOn = false;
-  function toggleTask(task) {
-    if (!task.complete) {
-      $currentGameScore += task.points;
-      task.complete = true;
-      //   confettiOn = true;
-      //   setTimeout(() => {
-      //     confettiOn = false;
-      //   }, 2000);
-    } else {
-      $currentGameScore -= task.points;
-      task.complete = false;
-    }
-    $currentGame = $currentGame;
-  }
-
-  function openSlideUpPanelWithPhotoUpload() {
-    $layoutStore.slideUpPanel = {
-      component: PhotoUploadOptions,
-      name: "game[cover_image]",
-      text: "Upload cover photo",
-    };
-    $layoutStore.slideUpPanel.open = true;
-  }
 </script>
 
 <!-- <div class="flex items-center justify-center h-full">
@@ -82,84 +54,30 @@
   div {
     height: 100%;
   }
-  p {
-    color: white;
-  }
-  .complete {
-    color: gray;
-  }
-
-  span.points {
+  a {
     background: linear-gradient(180deg, #8614f8 0, #760be0 100%);
-  }
-
-  header {
-    height: 70vh;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-  }
-  header h1 {
-    z-index: 10;
-    line-height: 0.8;
-  }
-  .overlay {
-    /* z-index: 0; */
-    background: linear-gradient(
-      0deg,
-      rgba(14, 14, 15, 1) 0%,
-      rgba(1, 1, 1, 0.2) 7%,
-      rgba(1, 1, 1, 0.2) 18%,
-      rgba(3, 3, 3, 0.2) 70%,
-      rgba(13, 13, 13, 1) 100%
-    );
-  }
-
-  button#photo-options {
-    width: 60px;
-    color: rgba(255, 255, 255, 0.5);
-    position: absolute;
-    top: 40px;
-    right: 20px;
-  }
-  button svg {
-    width: 100%;
-  }
-
-  input[type="file"] {
-    display: none;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 5px;
   }
 </style>
 
 <div class="overflow-y-auto">
   {#if $currentGame}
-    <header
-      in:fly={{ delay: 100, y: 60, duration: 600, easing: backOut }}
-      class="relative">
-      <div
-        in:fade={{ delay: 300, duration: 500 }}
-        class="overlay absolute w-full h-full" />
-      <img src={$currentGame.cover_image} class="object-cover h-full w-full" />
-      <h1
-        in:fly={{ y: -30, easing: backOut, delay: 300 }}
-        class="text-4xl md:text-6xl text-white font-bold  uppercase absolute bottom-10 z-50 left-5">
-        <!-- {$currentGame.name} -->
+    <!-- <div class="text-white">{JSON.stringify($user)}</div> -->
+    <GameCover {currentGame} {currentGameScore} {currentUserIsPlaying} {user} />
 
-        <span>Score</span>
-        <h1 class="text-8xl font-extrabold ">{$currentGameScore}</h1>
-        <br />
-        <!-- <span class="font-light">{$currentUser.name.split(' ')[1]}</span> -->
-      </h1>
+    <a href="/play/{$currentGame.slug}/activity">Activity</a>
 
-      <button
-        on:click={openSlideUpPanelWithPhotoUpload}
-        in:fly={{ y: -20, delay: 800 }}
-        id="photo-options">
-        <CameraCircleIcon />
-      </button>
-    </header>
+    {#if $currentUserIsPlaying}
+      <GameTasks
+        {currentGame}
+        {currentGameScore}
+        {currentUserIsPlaying}
+        {user} />
+    {/if}
 
-    <div class="grid sm:grid-cols-2">
+    <!-- <div class="grid sm:grid-cols-2">
       <ul class="col-span-1">
         {#if $currentGame.tasks}
           {#each $currentGame.tasks.filter((t) => !t.complete) as task (task.id)}
@@ -215,7 +133,7 @@
           {/each}
         {/if}
       </ul>
-    </div>
+    </div> -->
   {/if}
 </div>
 

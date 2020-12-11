@@ -6,6 +6,7 @@ const userStoreUnsub = user.subscribe((value) => {
   userStore = value;
 });
 const request = (method) => async (endpoint, data) => {
+  // console.log("userStore.auth_token :>> ", userStore.auth_token);
   // const envURL = `https://unusuallyfocused-backend.herokuapp.com`;
   return fetch(`${envURL}${endpoint}`, {
     method,

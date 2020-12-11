@@ -4,6 +4,7 @@
   import { backOut } from "svelte/easing";
   import envURL from "../../env-url";
   import Api from "../../utils/api";
+  import { updateUserStore } from "../../utils/yootils";
   // export let user_slug;
   import { page, goto, ready, params } from "@roxi/routify";
   import PhotoUploadOptions from "../_components/SlideUpPanel/PhotoUploadOptions.svelte";
@@ -19,8 +20,10 @@
       return;
     } else {
       const data = await Api.get(`/users/${$params.user_slug}`);
+      updateUserStore(data);
+      $currentUser = $currentUser;
+      console.log("$currentUser :>> ", $currentUser);
       userProfile = data;
-      console.log("userProfile :>> ", userProfile);
       $ready();
     }
   }

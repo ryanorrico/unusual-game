@@ -9,6 +9,7 @@
   // import Sidebar from "../_components/Sidebar/Sidebar.svelte";
   if (localStorage.getItem("user")) {
     $user = JSON.parse(localStorage.getItem("user"));
+    // $user.auth_token = user.auth_token;
   }
   // $: if (!$user || !$user.auth_token) $goto("/login", {}, true);
   //   onMount(() => ($layoutStore.topNav.open = false));

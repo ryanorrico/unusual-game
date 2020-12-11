@@ -15,7 +15,7 @@
     const data = await Api.get(`/courses/${$params.slug}`);
     let obj = $coursesStore.find((x) => x.slug === data.slug);
     $currentCourse = obj;
-    $currentCourse.cover_image = data.cover_image;
+    if (data.cover_image) $currentCourse.cover_image = data.cover_image;
     if (data.discussion) {
       $currentCourse.discussion = data.discussion;
       $currentDiscussion = data.discussion;

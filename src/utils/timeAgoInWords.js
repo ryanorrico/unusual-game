@@ -2,8 +2,8 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-export const createdLessThanAMinuteAgo = (object) => {
-  let bool = (new Date() - new Date(object.created_at)) / 1000 < 60;
+export const createdLessThanTwoMinutesAgo = (object) => {
+  let bool = (new Date() - new Date(object.created_at)) / 1000 < 120;
   return bool;
 };
 
@@ -26,8 +26,8 @@ export const timeAgoInWords = (object) => {
 };
 
 export const formattedTimeAgoInWords = (object) => {
-  if (createdLessThanAMinuteAgo(object)) {
-    return timeAgoInWords(object).full_string;
+  if (createdLessThanTwoMinutesAgo(object)) {
+    return `${timeAgoInWords(object).full_string} ago`;
   } else {
     return timeAgoInWords(object).one_letter;
   }
