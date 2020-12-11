@@ -4,6 +4,7 @@
   import { backOut, cubicInOut } from "svelte/easing";
 
   import clickOutside from "../../../utils/clickOutside";
+  import SlideOverPanelDefault from "./SlideOverPanelDefault.svelte";
   // import SlideoverPanelDefault from "./SlideOverPanelDefault.svelte";
 
   // export let slotComponent = SlideoverPanelDefault;
