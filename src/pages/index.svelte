@@ -29,8 +29,12 @@
       text: "Login",
     },
     {
-      href: "/discussions/test",
-      text: "Discuss",
+      href: "/play/the-game",
+      text: "The Game",
+    },
+    {
+      href: "/courses",
+      text: "Courses",
     },
   ];
   // import PostCard from "./_posts/_components/PostCard.svelte";

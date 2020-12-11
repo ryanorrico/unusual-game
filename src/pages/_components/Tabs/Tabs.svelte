@@ -49,6 +49,12 @@
 <!-- {#if !$isActive('/write')} -->
 <div class="flex">
   <a
+    class:active={$isActive('/courses')}
+    href="/courses"
+    class="w-full  py-4 px-8 cursor-pointer flex items-center text-sm text-gray-500">
+    courses
+  </a>
+  <a
     class:active={$isActive('/write')}
     href="/write"
     class="w-full  py-4 px-8 cursor-pointer flex items-center text-sm text-gray-500">

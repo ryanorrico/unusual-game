@@ -2,13 +2,11 @@
   import {
     currentDocument,
     //   documentsIndexStore,
-    user,
-    folder,
+    // user,
+    // folder,
   } from "../../stores";
   import Api from "../../utils/api";
   import { goto, ready } from "@roxi/routify";
-
-  $: createNewDocument();
 
   async function createNewDocument() {
     if (!window.routify.inBrowser) {
@@ -27,6 +25,7 @@
       $ready();
     }
   }
+  createNewDocument();
 </script>
 
 OK.

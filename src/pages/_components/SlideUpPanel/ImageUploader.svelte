@@ -14,6 +14,8 @@
   import FilePondPluginImagePreview from "filepond-plugin-image-preview";
   import { onMount } from "svelte";
   import AlternateHamburger from "../../_components/TopNav/AlternateHamburger.svelte";
+  import { currentGame } from "../../play/game-store";
+  import { currentCourse } from "../../courses/course-stores";
   // import AudioControls from "../_components/AudioPlayer/AudioControls.svelte";
   registerPlugin(FilePondPluginImagePreview);
 
@@ -31,10 +33,17 @@
     // },
     withCredentials: false,
     onprocessfile: (response) => console.log("response :>> ", response),
-    onload: (data) => {
+    onload: (response) => {
+      const data = JSON.parse(response);
+      console.log("data :>> ", data);
       if (name === "user[image]") updateUserStore(data);
-      if (name === "document[cover_image]") updateDocumentStore(data);
+      if (name === "document[cover_image]")
+        $currentDocument.cover_image = data.cover_image;
       if (name === "document[images]") updateUploadedImageStore(data);
+      if (name === "game[cover_image]")
+        $currentGame.cover_image = data.cover_image;
+      if (name === "course[cover_image]")
+        $currentCourse.cover_image = data.cover_image;
       // return res;
     },
     onerror: (response) => response.data,
@@ -52,12 +61,11 @@
 
   function updateDocumentStore(data) {
     console.log("data :>> ", data);
-    $currentDocument.cover_image = JSON.parse(data).cover_image;
+
     // localStorage.setItem("user", JSON.stringify($currentUser));
   }
 
   function updateUserStore(data) {
-    $currentUser = JSON.parse(data);
     let authToken = JSON.parse(localStorage.getItem("user")).auth_token;
     $currentUser.auth_token = authToken;
     localStorage.setItem("user", JSON.stringify($currentUser));

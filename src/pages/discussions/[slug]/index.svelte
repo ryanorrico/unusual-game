@@ -11,17 +11,17 @@
   //   fetchDiscussion();
   // });
   // if (window.routify.inBrowser) {
-  $: fetchDiscussion();
   // }
 
-  async function fetchDiscussion() {
+  async function fetchDiscussion(slug) {
     if (!window.routify.inBrowser) {
       return;
     } else {
-      $currentDiscussion = await Api.get(`/discussions/${$params.slug}`);
+      $currentDiscussion = await Api.get(`/discussions/${slug}`);
       $ready();
     }
   }
+  $: fetchDiscussion($params.slug);
 </script>
 
 {#if $currentDiscussion}

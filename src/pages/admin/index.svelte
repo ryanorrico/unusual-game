@@ -1,19 +1,20 @@
 <script>
   import { ready } from "@roxi/routify";
   import Api from "../../utils/api";
-  import { user, userDocuments } from "../../stores";
+  import { user, userDocuments, postsStore } from "../../stores";
+  import DiscussionToggle from "./_components/DiscussionToggle.svelte";
   let posts;
-  $: fetchPosts();
 
   async function fetchPosts() {
     if (!window.routify.inBrowser) {
       return;
     } else {
       const data = await Api.get("/posts");
-      posts = data;
+      $postsStore = data;
       $ready();
     }
   }
+  fetchPosts();
 </script>
 
 <!-- Activity table (small breakopoint and up) -->
@@ -35,8 +36,9 @@
               </th>
               <th
                 class="hidden px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider md:block">
-                Status
+                Discussion
               </th>
+
               <th
                 class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
@@ -44,8 +46,8 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            {#if posts}
-              {#each posts as post}
+            {#if $postsStore && $postsStore.length > 0}
+              {#each $postsStore as post}
                 <tr class="bg-white">
                   <td
                     class="max-w-0 w-full px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -80,11 +82,17 @@
                   </td>
                   <td
                     class="hidden px-6 py-4 whitespace-nowrap text-sm text-gray-500 md:block">
-                    <span
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 capitalize">
-                      Post
-                    </span>
+                    <div class="flex items-center">
+                      <DiscussionToggle {post} {postsStore} />
+                      {#if post.discussion}
+                        <p class="text-sm ml-1 text-gray-400">
+                          <strong> {post.discussion.total_comments}</strong>
+                          comments
+                        </p>
+                      {/if}
+                    </div>
                   </td>
+
                   <td
                     class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
                     {post.created_at}

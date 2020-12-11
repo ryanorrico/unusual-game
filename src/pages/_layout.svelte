@@ -4,20 +4,40 @@
   // import { writable } from "svelte/store";
   // import { backOut, cubicInOut, cubicOut } from "svelte/easing";
   // import { fly } from "svelte/transition";
-  // import TopNavDesktop from "./_components/TopNav/TopNavDesktop.svelte";
-
+  import TopNavDesktop from "./_components/TopNav/TopNavDesktop.svelte";
+  import Tabs from "./_components/Tabs/Tabs.svelte";
+  import ActionCable from "actioncable";
+  const websocketUrl = "ws://127.0.0.1:3001/cable";
   // import { goto, url, page } from "@roxi/routify";
 
-  import { user, layoutStore, podcastStore } from "../stores";
+  import {
+    user,
+    layoutStore,
+    podcastStore,
+    notificationStore,
+  } from "../stores";
 
   if (localStorage.getItem("user")) {
     $user = JSON.parse(localStorage.getItem("user"));
   }
-  // import Tabs from "./_components/Tabs/Tabs.svelte";
+
+  let cable;
+  async function subscribeToActionCableNotificationChannel() {
+    cable = ActionCable.createConsumer(websocketUrl);
+    cable.subscriptions.create("NotificationChannel", {
+      received: function (data) {
+        if (!data.user.id == $user.id) {
+          $notificationStore = [...$notificationStore, data];
+        }
+      },
+    });
+  }
+  // subscribeToActionCableNotificationChannel();
   // import AudioPlayer from "./_components/AudioPlayer.svelte";
   // import TopNavMobile from "./_components/TopNav/TopNavMobile.svelte";
   // import SlideoverPanel from "./_components/SlideoverPanel/SlideoverPanel.svelte";
   import SlideUpPanel from "./_components/SlideUpPanel/SlideUpPanel.svelte";
+  import Notifications from "./_components/Notifications/Notifications.svelte";
   // import XCloseButtonForPanels from "./_components/XCloseButtonForPanels.svelte";
   // import { isActive } from "@roxi/routify";
 
@@ -77,9 +97,9 @@
 <div>
   <!-- {#if $layoutStore.topNav.open} -->
   <div class="hidden sm:block">
-    <!-- <TopNavDesktop {user}> -->
-    <!-- <Tabs /> -->
-    <!-- </TopNavDesktop> -->
+    <TopNavDesktop {user}>
+      <Tabs />
+    </TopNavDesktop>
   </div>
   <!-- <div class="sm:hidden">
       <TopNavMobile {user}>sd</TopNavMobile>
@@ -100,6 +120,9 @@
   {#if $layoutStore.slideUpPanel.open}
     <SlideUpPanel />
   {/if}
+  {#if $notificationStore.length > 0}
+    <Notifications {notificationStore} />
+  {/if}
 
   <!-- {#if $podcastStore.playerOpen}
     <div
@@ -117,6 +140,7 @@
       </button>
     </div>
   {/if}  -->
+
   <BottomNav />
 </div>
 

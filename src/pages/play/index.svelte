@@ -108,7 +108,7 @@
             class="bg-gray-900 flex justify-between">
             <div
               class="flex-1 flex justify-between space-x-1 items-center p-5 border-t border-gray-800">
-              <p class:complete={task.complete}>{task.task}</p>
+              <p class:complete={task.complete}>{task.body}</p>
 
               <button
                 on:click={() => toggleTask(task)}

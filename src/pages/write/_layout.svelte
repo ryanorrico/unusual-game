@@ -13,6 +13,28 @@
   // $: if (!$user || !$user.auth_token) $goto("/login", {}, true);
   //   onMount(() => ($layoutStore.topNav.open = false));
   //   onDestroy(() => ($layoutStore.topNav.open = true));
+  import ImageIcon from "../_components/svg/ImageIcon.svelte";
+  import ShareArrowRight from "../_components/svg/ShareArrowRight.svelte";
+  import AttachImage from "../_components/Sidebar/AttachImage.svelte";
+  import SharePost from "../_components/Sidebar/SharePost.svelte";
+  // import VideoPlayer from "./VideoPlayer.svelte";
+  // import RectanglePlay from "../svg/RectanglePlay.svelte";
+  // import QuoteBubble from "../svg/QuoteBubble.svelte";
+  let sidebarNavTabs = [
+    {
+      iconComponent: ImageIcon,
+      tabComponent: AttachImage,
+    },
+    {
+      iconComponent: ShareArrowRight,
+      tabComponent: SharePost,
+    },
+    // {
+    //   iconComponent: RectanglePlay,
+    //   tabComponent: VideoPlayer,
+    //   width: 500,
+    // },
+  ];
 </script>
 
 <style>
@@ -35,7 +57,7 @@
 
 <div class="flex h-screen">
   {#if $page.path === '/write/:slug/index'}
-    <Sidebar {currentDocument} {user} />
+    <Sidebar {currentDocument} {sidebarNavTabs} />
   {/if}
   <main>
     <slot />

@@ -1,39 +1,47 @@
 <script>
   let commentForm;
   export let currentDiscussion, user;
-
-  import { params } from "@roxi/routify";
   import Api from "../../../utils/api";
+
+  let newCommentFormData = {
+    body: "",
+    nested_comments: [],
+    user_id: $user.id,
+    user: { id: $user.id, name: $user.name, image: $user.image },
+  };
+
   async function submitComment() {
+    let newCommentObj = Object.assign({}, newCommentFormData);
+    newCommentObj.created_at = Date.now();
+    newCommentFormData.body = "";
     $currentDiscussion.comments = [
-      {
-        body: $currentDiscussion.newComment,
-        user: {
-          image: $user.image,
-          name: $user.name,
-        },
-      },
+      newCommentObj,
       ...$currentDiscussion.comments,
     ];
 
-    let data = {
-      body: $currentDiscussion.newComment,
-      user_id: $user.id,
-    };
     const response = await Api.post(
-      `/discussions/${$params.slug}/comments`,
-      data
+      `/discussions/${$currentDiscussion.id}/comments`,
+      newCommentObj
     );
-    $currentDiscussion.newComment = "";
-    console.log("response :>> ", response);
+    newCommentObj.id = response.id;
+    $currentDiscussion = $currentDiscussion;
   }
 </script>
 
-<textarea
-  class="p-2 w-full rounded-md"
-  rows="5"
-  bind:this={commentForm}
-  bind:value={$currentDiscussion.newComment} />
-<button
-  on:click={submitComment}
-  class="bg-purple-600 px-3 py-1 rounded text-white">Submit</button>
+<div class="flex flex-col space-y-3">
+  <div class="flex space-x-2">
+    <img src={$user.image} class="w-8 h-8 rounded-full" />
+    <textarea
+      class="p-2 w-full rounded"
+      rows="2"
+      placeholder="Write a comment."
+      bind:this={commentForm}
+      bind:value={newCommentFormData.body} />
+  </div>
+
+  <div class="flex justify-end">
+    <button
+      on:click={submitComment}
+      class="bg-purple-600 w-20 py-1 rounded text-white">Submit</button>
+  </div>
+</div>

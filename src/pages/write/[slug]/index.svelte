@@ -149,7 +149,7 @@
   }
 </style>
 
-<!-- <svelte:window on:keydown={handleKeydown} /> -->
+<svelte:window on:keydown={handleKeydown} />
 
 {#if $currentDocument}
   <div class="max-w-4xl mx-auto">

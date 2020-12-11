@@ -4,8 +4,10 @@
   import { ready } from "@roxi/routify";
   import { fade } from "svelte/transition";
   let podcasts;
-  if (window.routify.inBrowser) {
-    const fetchPodcasts = () => {
+  async function fetchPodcasts() {
+    if (!window.routify.inBrowser) {
+      return;
+    } else {
       fetch(
         `https://www.buzzsprout.com/api/${buzzsproutAPI.podcastId}/episodes.json`,
         {
@@ -27,29 +29,12 @@
           );
         })
         .then($ready());
-      // .catch((errors) => console.log("errors :>> ", errors));
-      // };
-      // async function fetchPodcasts() {
-      //   const response = await fetch(
-      //     `https://www.buzzsprout.com/api/${buzzsproutAPI.podcastId}/episodes.json`,
-      //     {
-      //       headers: {
-      //         "Access-Control-Allow-Origin": "*",
-      //         Authorization: `Token token=${buzzsproutAPI.token}`,
-      //         "Content-Type": "application/json",
-      //       },
-      //     }
-      //   );
-      //   const data = await response.json();
-      //   podcasts = data.filter(
-      //     (podcast) =>
-      //       !podcast.title.includes("Premium Group Training", "Rabbit Hole 2:")
-      //   );
-      //   $ready();
-      // }
-    };
-    $: fetchPodcasts();
+    }
   }
+  // if (window.routify.inBrowser) {
+  //   const fetchPodcasts = () => {};
+  // }
+  $: fetchPodcasts();
 </script>
 
 <style>

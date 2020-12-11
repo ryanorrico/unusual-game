@@ -1,5 +1,5 @@
 <script>
-  export let post;
+  export let post, currentDiscussion;
   import { fly, fade } from "svelte/transition";
   import { quintOut, backOut } from "svelte/easing";
   import XCloseButtonForPanels from "../../_components/XCloseButtonForPanels.svelte";
@@ -187,8 +187,7 @@
         <p class="mt-8 text-xl leading-8">{post.description}</p>
       {/if} -->
     </div>
-    <div class="mt-6 prose prose-indigo prose-lg  mx-auto">
-      <p>sfd</p>
+    <div class="mt-6 prose prose-indigo prose-lg mx-auto">
       {@html post.body}
 
       <!-- <p>

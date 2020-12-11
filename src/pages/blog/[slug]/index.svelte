@@ -2,23 +2,44 @@
   import envURL from "../../../env-url";
   import { ready, params } from "@roxi/routify";
   // import Post from "../_components/Post.svelte";
-  import { fade } from "svelte/transition";
-  import { backOut } from "svelte/easing";
-  import { send, receive } from "../../../transitions/crossfade";
+  import ActionCable from "actioncable";
+  const websocketUrl = "ws://127.0.0.1:3001/cable";
+
+  import { user, notificationStore } from "../../../stores";
+  // import { fade } from "svelte/transition";
+  // import { backOut } from "svelte/easing";
+  // import { send, receive } from "../../../transitions/crossfade";
   let post;
   $: fetchPost();
 
+  let cable;
   async function fetchPost() {
     const data = await Api.get(`/posts/${$params.slug}`);
     post = data;
-    console.log("post :>> ", post);
+    if (post.discussion) {
+      $currentDiscussion = post.discussion;
+    }
+    subscribeToActionCableChannel();
     $ready();
   }
 
-  import PostCard from "../_components/PostCard.svelte";
-  import Post from "../_components/PostCard.svelte";
+  async function subscribeToActionCableChannel() {
+    cable = ActionCable.createConsumer(websocketUrl);
+    cable.subscriptions.create("RoomChannel", {
+      received: function (data) {
+        console.log("data :>> ", data);
+        // $notificationStore = [...$notificationStore, data];
+      },
+    });
+
+    console.log(cable);
+  }
+  // import PostCard from "../_components/PostCard.svelte";
+  // import Post from "../_components/PostCard.svelte";
   import Content from "../_components/Content.svelte";
   import Api from "../../../utils/api";
+  import { currentDiscussion } from "../../../stores";
+  import Discussion from "../../_components/Discussions/Discussion.svelte";
 </script>
 
 <!-- <Post {post} /> -->
@@ -26,13 +47,7 @@
   main {
     height: 100%;
     overflow-y: auto;
-  }
-  div {
-    transform: scale(1);
-    border-radius: 0;
-    box-shadow: 0 0 0 0 #00000080;
-    margin: 0;
-    /* animation-duration: 1000ms; */
+    width: 100%;
   }
 
   .overlay {
@@ -49,11 +64,16 @@
   img {
     width: 100%;
   }
+
+  #discussion-wrapper {
+    /* max-width: 65ch; */
+  }
 </style>
 
 <main>
+  <!-- <div class="text-white">{JSON.stringify($currentDiscussion)}</div> -->
   {#if post}
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-4xl mx-auto relative">
       <div class="overlay absolute w-full h-full" />
       <div class="absolute top-4 left-4">
         <p class="text-2xl font-bold text-white">{post.title}</p>
@@ -65,5 +85,11 @@
     </div>
 
     <Content {post} />
+
+    <div id="discussion-wrapper" class="py-6 px-2 mx-auto">
+      {#if post.discussion}
+        <Discussion {currentDiscussion} {user} />
+      {/if}
+    </div>
   {:else}...{/if}
 </main>

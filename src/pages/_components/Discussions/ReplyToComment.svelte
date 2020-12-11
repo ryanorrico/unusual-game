@@ -2,49 +2,43 @@
   export let user, comment;
   import { currentDiscussion } from "../../../stores";
   import Api from "../../../utils/api";
-  import { slide } from "svelte/transition";
+  import { slide, fade } from "svelte/transition";
+
   let nestedCommentForm;
-  let commentBody;
+  let newCommentFormData = {
+    body: "",
+    parent_id: "",
+    user_id: $user.id,
+    user: { id: $user.id, name: $user.name, image: $user.image },
+    // nested_comments: [],
+  };
 
   async function submitComment() {
     let selectedComment = $currentDiscussion.comments.find(
       (x) => x.id == comment.id
     );
-    console.log(
-      "selectedComment.nested_comments :>> ",
-      selectedComment.nested_comments
-    );
+    const newCommentObj = Object.assign({}, newCommentFormData);
+    newCommentFormData.body = "";
+    newCommentObj.parent_id = selectedComment.id;
+    // add comment to store immediately so it shows up right away. you'll add ID
+    // after Rails response
     selectedComment.nested_comments = [
       ...selectedComment.nested_comments,
-      {
-        body: commentBody.trim(),
-        user: { name: $user.name, image: $user.image },
-      },
+      newCommentObj,
     ];
+
     $currentDiscussion = $currentDiscussion;
-    let data = {
-      parent_id: comment.id,
-      body: commentBody.trim(),
-    };
-    commentBody = "";
 
-    const response = await Api.post(
+    const data = await Api.post(
       `/discussions/${$currentDiscussion.id}/comments/`,
-      data
+      newCommentObj
     );
-    console.log("response :>> ", response);
+
+    newCommentObj.id = data.id;
+    $currentDiscussion = $currentDiscussion;
   }
 
-  function expand() {
-    // this.rows = 3;
-  }
-
-  function collapse() {
-    // this.rows = 1;
-  }
   function handleKeydown(e) {
-    console.log("commentBody :>> ", commentBody);
-    // console.log("commentBody.length :>> ", commentBody.length);
     if (
       e.key === "Enter" &&
       !e.shiftKey &&
@@ -84,22 +78,16 @@
   }
 </style>
 
-<div transition:slide>
+<div in:fade|local={{ delay: 300 }}>
   <div class="flex space-x-2">
     <img src={$user.image} class="w-8 h-8 rounded-full object-cover" />
     <div
       id="reply-input"
       contenteditable
       on:keydown={handleKeydown}
-      on:focus={expand}
       bind:this={nestedCommentForm}
-      bind:innerHTML={commentBody}
+      bind:innerHTML={newCommentFormData.body}
       data-placeholder="Write a comment"
-      class="rounded bg-gray-900 placeholder-gray-600 text-white p-2 w-full " />
-  </div>
-  <div class="flex justify-end">
-    <!-- <button
-      on:click={submitComment}
-      class="bg-purple-600 px-3 py-1 rounded text-white text-xs">Submit</button> -->
+      class="rounded bg-gray-900 border border-gray-800 placeholder-gray-600 text-white p-2 w-full " />
   </div>
 </div>

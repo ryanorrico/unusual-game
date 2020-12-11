@@ -12,17 +12,21 @@
 
   // let data = {};
   let posts;
-  if (window.routify.inBrowser) {
-    const fetchPosts = () => {
+  async function fetchPosts() {
+    if (!window.routify.inBrowser) {
+      return;
+    } else {
       fetch(`${envURL}/posts`)
         .then((response) => response.json())
         .then((json) => {
           posts = json;
+          console.log("posts :>> ", posts);
         })
         .then($ready());
-    };
-    $: fetchPosts();
+    }
   }
+
+  $: fetchPosts();
 </script>
 
 <style>
@@ -55,7 +59,7 @@
 <!-- <div class="text-white">{window.routify.inBrowser}</div> -->
 <!-- <div in:receive={{ key: 'div' }} out:send={{ key: 'div' }}> -->
 <div
-  in:fade={{ delay: 100, duration: 500 }}
+  in:fade={{ delay: 200, duration: 500 }}
   class="px-4 w-full sm:max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
   {#if posts}
     {#each posts as post}

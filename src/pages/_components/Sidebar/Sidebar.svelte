@@ -3,26 +3,45 @@
   import { fade, fly, scale, slide } from "svelte/transition";
   import { backIn, backOut, cubicOut } from "svelte/easing";
   let sidebarContainer;
-  export let user, currentDocument;
+  import { user } from "../../../stores";
   let rightPanelOpen = false;
   let rightPanelOpenWide = false;
   let rightPanelWidth;
   let sidebarContainerWidth;
   import { url } from "@roxi/routify";
-  import ImageIcon from "../svg/ImageIcon.svelte";
   import { writable } from "svelte/store";
-  import AttachImage from "./AttachImage.svelte";
-  import SharePost from "./SharePost.svelte";
+  import ListBulletRectangle from "../svg/ListBulletRectangle.svelte";
+  import CourseContent from "../Courses/CourseContent.svelte";
   import ShareArrowRight from "../svg/ShareArrowRight.svelte";
-  // import VideoPlayer from "./VideoPlayer.svelte";
-  import RectanglePlay from "../svg/RectanglePlay.svelte";
+  import SharePost from "./SharePost.svelte";
+  import QuoteBubble from "../svg/QuoteBubble.svelte";
+  import CourseAdmin from "../Courses/CourseAdmin.svelte";
+  // import { page } from "@roxi/routify";
+  // import SidebarWriteNav from "./SidebarWriteNav.svelte";
+
+  export const activeSidebarTab = writable();
+  // export let sidebarNavTabs;
+
+  let sidebarNavTabs = [
+    {
+      iconComponent: ListBulletRectangle,
+      tabComponent: CourseContent,
+    },
+    {
+      iconComponent: ShareArrowRight,
+      tabComponent: SharePost,
+    },
+    {
+      iconComponent: QuoteBubble,
+      tabComponent: CourseAdmin,
+    },
+  ];
 
   function toggleRightPanel() {
     if (rightPanelOpen && this.dataset.index !== $activeSidebarTab) {
       $activeSidebarTab = this.dataset.index;
     } else {
       $activeSidebarTab = this.dataset.index;
-      console.log("$activeSidebarTab :>> ", $activeSidebarTab);
       rightPanelOpen = !rightPanelOpen;
       sidebarContainer.style.width = !rightPanelOpen ? "70px" : "300px";
     }
@@ -31,22 +50,6 @@
       $activeSidebarTab = null;
     }
   }
-  export const activeSidebarTab = writable();
-  let sidebarNavTabs = [
-    {
-      iconComponent: ImageIcon,
-      tabComponent: AttachImage,
-    },
-    {
-      iconComponent: ShareArrowRight,
-      tabComponent: SharePost,
-    },
-    // {
-    //   iconComponent: RectanglePlay,
-    //   tabComponent: VideoPlayer,
-    //   width: 500,
-    // },
-  ];
 </script>
 
 <style>
@@ -64,7 +67,11 @@
   }
 
   button.active {
-    color: rgba(255, 255, 255, 0.9);
+    color: #8614f8;
+    background-color: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5) inset;
+    border-radius: 5px;
+
     transition: color 300ms;
   }
 
@@ -109,7 +116,7 @@
   }
   #right-panel {
     /* background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E"); */
-    padding: 80px 12px;
+    padding: 80px 0px;
     background-color: rgba(27, 27, 30, 1);
     /* border-right: 1px solid rgba(50, 50, 50, 0.5); */
     box-shadow: 1px 0px 1px 0 rgba(0, 0, 0, 0.3);
@@ -179,7 +186,7 @@
         aria-label="Sidebar">
         <div class="mt-6 pt-6">
           <div class="space-y-4">
-            {#if $currentDocument}
+            {#if sidebarNavTabs}
               {#each sidebarNavTabs as tab, index}
                 <button
                   class:active={$activeSidebarTab == index && rightPanelOpen}
@@ -192,21 +199,18 @@
           </div>
         </div>
       </nav>
+
       <a href={$url(`/${$user.slug}`)}>
         <img src={$user.image} class="rounded-full w-16 shadow" />
       </a>
     </div>
   </div>
-  {#if rightPanelOpen}
-    <div
-      id="right-panel"
-      bind:clientWidth={rightPanelWidth}
-      class:rightPanelOpen>
-      {#if $activeSidebarTab}
-        <svelte:component
-          this={sidebarNavTabs[$activeSidebarTab].tabComponent} />
-      {/if}
-    </div>
-    <div class="w-1 h-full bg-gray-800" />
-  {/if}
+  <!-- {#if rightPanelOpen} -->
+  <div id="right-panel" bind:clientWidth={rightPanelWidth} class:rightPanelOpen>
+    {#if $activeSidebarTab}
+      <svelte:component this={sidebarNavTabs[$activeSidebarTab].tabComponent} />
+    {/if}
+  </div>
+  <!-- <div class="w-1 h-full bg-gray-800" /> -->
+  <!-- {/if} -->
 </div>
